@@ -18,7 +18,7 @@ export function SiteHeader() {
           <span className="grid h-9 w-9 place-items-center rounded-full bg-gradient-warm text-cream shadow-pop border-2 border-ink">
             <Sparkles className="h-4 w-4" />
           </span>
-          Brújula<span className="text-coral">.</span>
+          Talento STEAM<span className="text-coral">.</span>
         </Link>
         <nav className="hidden items-center gap-1 md:flex">
           {links.map((l) => {
@@ -68,7 +68,7 @@ export function SiteFooter() {
     <footer className="mt-24 border-t border-ink/10 bg-secondary/40">
       <div className="mx-auto grid max-w-6xl gap-6 px-5 py-12 md:grid-cols-3">
         <div>
-          <div className="font-display text-2xl font-bold">Brújula<span className="text-coral">.</span></div>
+          <div className="font-display text-2xl font-bold">Talento STEAM<span className="text-coral">.</span></div>
           <p className="mt-2 max-w-xs text-sm text-muted-foreground">
             Orientación vocacional honesta para que elijas con cabeza, corazón y datos.
           </p>
@@ -89,7 +89,7 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="border-t border-ink/10 px-5 py-4 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} Brújula — Hecho para estudiantes que están decidiendo.
+        © {new Date().getFullYear()} Talento STEAM — Hecho para estudiantes que están decidiendo.
       </div>
     </footer>
   );

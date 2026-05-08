@@ -72,10 +72,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Brújula — Test vocacional y orientación profesional" },
+      { title: "Talento STEAM — Test vocacional y orientación profesional" },
       { name: "description", content: "Descubre tu carrera ideal: test vocacional, info de carreras, universidades y consejos para tu proyecto de vida." },
-      { name: "author", content: "Brújula" },
-      { property: "og:title", content: "Brújula — Orientación vocacional" },
+      { name: "author", content: "Talento STEAM" },
+      { property: "og:title", content: "Talento STEAM — Orientación vocacional" },
       { property: "og:description", content: "Test vocacional, carreras, universidades y recursos." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

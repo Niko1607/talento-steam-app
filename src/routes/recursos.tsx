@@ -5,9 +5,9 @@ import { Heart, Brain, Compass, Users, BookOpen, Coffee } from "lucide-react";
 export const Route = createFileRoute("/recursos")({
   head: () => ({
     meta: [
-      { title: "Consejos y recursos — Brújula" },
+      { title: "Consejos y recursos — Talento STEAM" },
       { name: "description", content: "Tips para elegir carrera, manejo del estrés, habilidades blandas y proyecto de vida." },
-      { property: "og:title", content: "Consejos y recursos — Brújula" },
+      { property: "og:title", content: "Consejos y recursos — Talento STEAM" },
       { property: "og:description", content: "Aprende a decidir mejor tu futuro académico y profesional." },
     ],
   }),
