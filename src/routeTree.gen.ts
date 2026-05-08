@@ -9,38 +9,128 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UniversidadesRouteImport } from './routes/universidades'
+import { Route as TestRouteImport } from './routes/test'
+import { Route as RecursosRouteImport } from './routes/recursos'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CarrerasIndexRouteImport } from './routes/carreras.index'
+import { Route as CarrerasSlugRouteImport } from './routes/carreras.$slug'
 
+const UniversidadesRoute = UniversidadesRouteImport.update({
+  id: '/universidades',
+  path: '/universidades',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TestRoute = TestRouteImport.update({
+  id: '/test',
+  path: '/test',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecursosRoute = RecursosRouteImport.update({
+  id: '/recursos',
+  path: '/recursos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CarrerasIndexRoute = CarrerasIndexRouteImport.update({
+  id: '/carreras/',
+  path: '/carreras/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CarrerasSlugRoute = CarrerasSlugRouteImport.update({
+  id: '/carreras/$slug',
+  path: '/carreras/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/recursos': typeof RecursosRoute
+  '/test': typeof TestRoute
+  '/universidades': typeof UniversidadesRoute
+  '/carreras/$slug': typeof CarrerasSlugRoute
+  '/carreras/': typeof CarrerasIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/recursos': typeof RecursosRoute
+  '/test': typeof TestRoute
+  '/universidades': typeof UniversidadesRoute
+  '/carreras/$slug': typeof CarrerasSlugRoute
+  '/carreras': typeof CarrerasIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/recursos': typeof RecursosRoute
+  '/test': typeof TestRoute
+  '/universidades': typeof UniversidadesRoute
+  '/carreras/$slug': typeof CarrerasSlugRoute
+  '/carreras/': typeof CarrerasIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/recursos'
+    | '/test'
+    | '/universidades'
+    | '/carreras/$slug'
+    | '/carreras/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/recursos'
+    | '/test'
+    | '/universidades'
+    | '/carreras/$slug'
+    | '/carreras'
+  id:
+    | '__root__'
+    | '/'
+    | '/recursos'
+    | '/test'
+    | '/universidades'
+    | '/carreras/$slug'
+    | '/carreras/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  RecursosRoute: typeof RecursosRoute
+  TestRoute: typeof TestRoute
+  UniversidadesRoute: typeof UniversidadesRoute
+  CarrerasSlugRoute: typeof CarrerasSlugRoute
+  CarrerasIndexRoute: typeof CarrerasIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/universidades': {
+      id: '/universidades'
+      path: '/universidades'
+      fullPath: '/universidades'
+      preLoaderRoute: typeof UniversidadesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/test': {
+      id: '/test'
+      path: '/test'
+      fullPath: '/test'
+      preLoaderRoute: typeof TestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recursos': {
+      id: '/recursos'
+      path: '/recursos'
+      fullPath: '/recursos'
+      preLoaderRoute: typeof RecursosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +138,31 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/carreras/': {
+      id: '/carreras/'
+      path: '/carreras'
+      fullPath: '/carreras/'
+      preLoaderRoute: typeof CarrerasIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/carreras/$slug': {
+      id: '/carreras/$slug'
+      path: '/carreras/$slug'
+      fullPath: '/carreras/$slug'
+      preLoaderRoute: typeof CarrerasSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  RecursosRoute: RecursosRoute,
+  TestRoute: TestRoute,
+  UniversidadesRoute: UniversidadesRoute,
+  CarrerasSlugRoute: CarrerasSlugRoute,
+  CarrerasIndexRoute: CarrerasIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
