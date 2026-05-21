@@ -48,10 +48,11 @@ function Home() {
               </Link>
             </div>
             <div className="mt-10 flex items-center gap-6 text-sm text-muted-foreground">
-              <div><span className="font-display text-2xl font-bold text-foreground">8</span> preguntas</div>
-              <div><span className="font-display text-2xl font-bold text-foreground">+50</span> carreras</div>
-              <div><span className="font-display text-2xl font-bold text-foreground">3 min</span> en promedio</div>
+              <div><span className="font-display text-2xl font-bold text-foreground">15</span> preguntas</div>
+              <div><span className="font-display text-2xl font-bold text-foreground">20+</span> carreras</div>
+              <div><span className="font-display text-2xl font-bold text-foreground">20</span> universidades</div>
             </div>
+
           </div>
 
           <motion.div
@@ -130,7 +131,7 @@ function Home() {
             <h3 className="font-display text-4xl font-extrabold leading-tight md:text-5xl">
               ¿Listo para descubrir qué te mueve?
             </h3>
-            <p className="mt-3 text-cream/80">8 preguntas. 3 minutos. Una recomendación honesta de carreras alineadas a ti.</p>
+            <p className="mt-3 text-cream/80">15 preguntas. 5 minutos. Una recomendación honesta de carreras alineadas a ti.</p>
             <Link
               to="/test"
               className="mt-6 inline-flex items-center gap-2 rounded-full border-2 border-cream bg-cream px-6 py-3 font-semibold text-ink transition-transform hover:-translate-y-1"
