@@ -9,9 +9,9 @@ import { areas, careers, type Area } from "@/lib/careers-data";
 export const Route = createFileRoute("/test")({
   head: () => ({
     meta: [
-      { title: "Test vocacional gratuito — Talento STEAM" },
+      { title: "Test vocacional gratuito — Talento STEM" },
       { name: "description", content: "8 preguntas para descubrir tu perfil vocacional y carreras recomendadas." },
-      { property: "og:title", content: "Test vocacional — Talento STEAM" },
+      { property: "og:title", content: "Test vocacional — Talento STEM" },
       { property: "og:description", content: "Descubre tu perfil profesional en 3 minutos." },
     ],
   }),

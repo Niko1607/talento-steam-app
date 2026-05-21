@@ -6,9 +6,9 @@ import { MapPin, Layers, Wallet } from "lucide-react";
 export const Route = createFileRoute("/universidades")({
   head: () => ({
     meta: [
-      { title: "Universidades e instituciones — Talento STEAM" },
+      { title: "Universidades e instituciones — Talento STEM" },
       { name: "description", content: "Programas, modalidades y costos de universidades en Latinoamérica." },
-      { property: "og:title", content: "Universidades — Talento STEAM" },
+      { property: "og:title", content: "Universidades — Talento STEM" },
       { property: "og:description", content: "Compara universidades, modalidades y costos." },
     ],
   }),
