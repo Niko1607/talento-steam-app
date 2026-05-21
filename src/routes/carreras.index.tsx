@@ -8,9 +8,9 @@ export const Route = createFileRoute("/carreras/")({
   validateSearch: (s: Record<string, unknown>) => ({ area: (s.area as string) || "" }),
   head: () => ({
     meta: [
-      { title: "Carreras universitarias — Talento STEAM" },
+      { title: "Carreras universitarias — Talento STEM" },
       { name: "description", content: "Explora carreras: qué hacen, campo laboral, salario, duración y universidades." },
-      { property: "og:title", content: "Carreras — Talento STEAM" },
+      { property: "og:title", content: "Carreras — Talento STEM" },
       { property: "og:description", content: "Catálogo de carreras con datos reales." },
     ],
   }),

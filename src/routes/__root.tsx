@@ -4,11 +4,16 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useLocation,
+  useNavigate,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { AuthProvider, useAuth } from "@/lib/auth-context";
 
 import appCss from "../styles.css?url";
+
 
 function NotFoundComponent() {
   return (
@@ -72,18 +77,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Talento STEAM — Test vocacional y orientación profesional" },
-      { name: "description", content: "Descubre tu carrera ideal: test vocacional, info de carreras, universidades y consejos para tu proyecto de vida." },
-      { name: "author", content: "Talento STEAM" },
-      { property: "og:title", content: "Talento STEAM — Test vocacional y orientación profesional" },
-      { property: "og:description", content: "Descubre tu carrera ideal: test vocacional, info de carreras, universidades y consejos para tu proyecto de vida." },
+      { title: "Talento STEM — Test vocacional y orientación profesional" },
+      { name: "description", content: "Descubre tu carrera ideal: test vocacional, info de carreras, universidades de Colombia y consejos para tu proyecto de vida." },
+      { name: "author", content: "Talento STEM" },
+      { property: "og:title", content: "Talento STEM — Test vocacional y orientación profesional" },
+      { property: "og:description", content: "Descubre tu carrera ideal: test vocacional, info de carreras, universidades de Colombia y consejos para tu proyecto de vida." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "Talento STEAM — Test vocacional y orientación profesional" },
-      { name: "twitter:description", content: "Descubre tu carrera ideal: test vocacional, info de carreras, universidades y consejos para tu proyecto de vida." },
+      { name: "twitter:title", content: "Talento STEM — Test vocacional y orientación profesional" },
+      { name: "twitter:description", content: "Descubre tu carrera ideal: test vocacional, info de carreras, universidades de Colombia y consejos para tu proyecto de vida." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a2f675d9-f529-4a4e-8b16-39767c619ef5/id-preview-04a45da3--0cef374a-776c-44fd-900a-732dd5ebd865.lovable.app-1778253828623.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a2f675d9-f529-4a4e-8b16-39767c619ef5/id-preview-04a45da3--0cef374a-776c-44fd-900a-732dd5ebd865.lovable.app-1778253828623.png" },
+
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -120,7 +126,39 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <AuthProvider>
+        <AuthGate>
+          <Outlet />
+        </AuthGate>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
+
+// Public routes that don't require auth. Everything else is gated.
+const PUBLIC_ROUTES = new Set<string>(["/auth", "/"]);
+
+function AuthGate({ children }: { children: React.ReactNode }) {
+  const { session, loading } = useAuth();
+  const { pathname } = useLocation();
+  const nav = useNavigate();
+
+  const isPublic = PUBLIC_ROUTES.has(pathname);
+
+  useEffect(() => {
+    if (!loading && !session && !isPublic) {
+      nav({ to: "/auth" });
+    }
+  }, [loading, session, isPublic, nav]);
+
+  if (loading && !isPublic) {
+    return (
+      <div className="grid min-h-screen place-items-center text-sm text-muted-foreground">
+        Cargando…
+      </div>
+    );
+  }
+  if (!session && !isPublic) return null;
+  return <>{children}</>;
+}
+
