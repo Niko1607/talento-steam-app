@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { LogOut, Sparkles } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 
-const links = [
+const baseLinks = [
   { to: "/", label: "Inicio" },
   { to: "/test", label: "Test" },
   { to: "/carreras", label: "Carreras" },

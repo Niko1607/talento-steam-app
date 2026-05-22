@@ -11,6 +11,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { AuthProvider, useAuth } from "@/lib/auth-context";
+import { Toaster } from "@/components/ui/sonner";
 
 import appCss from "../styles.css?url";
 
@@ -130,6 +131,7 @@ function RootComponent() {
         <AuthGate>
           <Outlet />
         </AuthGate>
+        <Toaster richColors position="top-right" />
       </AuthProvider>
     </QueryClientProvider>
   );
