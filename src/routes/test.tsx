@@ -1,28 +1,68 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowRight, RotateCcw } from "lucide-react";
+import { ArrowLeft, ArrowRight, RotateCcw, CheckCircle2 } from "lucide-react";
+import { toast } from "sonner";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { questions } from "@/lib/quiz-data";
 import { areas, careers, type Area } from "@/lib/careers-data";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/auth-context";
 
 export const Route = createFileRoute("/test")({
   head: () => ({
     meta: [
       { title: "Test vocacional gratuito — Talento STEM" },
-      { name: "description", content: "8 preguntas para descubrir tu perfil vocacional y carreras recomendadas." },
+      { name: "description", content: "Preguntas para descubrir tu perfil vocacional y carreras recomendadas." },
       { property: "og:title", content: "Test vocacional — Talento STEM" },
-      { property: "og:description", content: "Descubre tu perfil profesional en 3 minutos." },
+      { property: "og:description", content: "Descubre tu perfil profesional en pocos minutos." },
     ],
   }),
   component: TestPage,
 });
 
 function TestPage() {
+  const { user } = useAuth();
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
+  const [loaded, setLoaded] = useState(false);
+  const [savedFlash, setSavedFlash] = useState(false);
+  const savedOnce = useRef(false);
+  const resultSaved = useRef(false);
+
   const total = questions.length;
   const done = step >= total;
+
+  // Load saved progress
+  useEffect(() => {
+    if (!user) { setLoaded(true); return; }
+    supabase.from("test_progress").select("*").eq("user_id", user.id).maybeSingle()
+      .then(({ data }) => {
+        if (data && Array.isArray(data.answers)) {
+          setAnswers(data.answers as number[]);
+          setStep(Math.min(data.current_step, total));
+          if ((data.answers as number[]).length > 0) {
+            toast.info("Retomamos donde lo dejaste", { description: `Pregunta ${Math.min(data.current_step, total) + 1}` });
+          }
+        }
+        setLoaded(true);
+      });
+  }, [user, total]);
+
+  // Autosave progress
+  useEffect(() => {
+    if (!user || !loaded || done) return;
+    if (answers.length === 0 && step === 0 && !savedOnce.current) return;
+    savedOnce.current = true;
+    const t = setTimeout(async () => {
+      await supabase.from("test_progress").upsert({
+        user_id: user.id, answers, current_step: step, updated_at: new Date().toISOString(),
+      });
+      setSavedFlash(true);
+      setTimeout(() => setSavedFlash(false), 1500);
+    }, 400);
+    return () => clearTimeout(t);
+  }, [answers, step, user, loaded, done]);
 
   const scores = useMemo(() => {
     const s: Record<Area, number> = {
@@ -47,14 +87,39 @@ function TestPage() {
     return careers.filter((c) => top.includes(c.area)).slice(0, 6);
   }, [ranked]);
 
+  // Save result when done
+  useEffect(() => {
+    if (!done || !user || resultSaved.current || ranked.length === 0) return;
+    resultSaved.current = true;
+    (async () => {
+      const top_areas = ranked.slice(0, 3).map(([k]) => k);
+      await supabase.from("test_results").insert({
+        user_id: user.id, scores, top_areas, top_area: top_areas[0] ?? null,
+      });
+      // Clear progress
+      await supabase.from("test_progress").delete().eq("user_id", user.id);
+      toast.success("Test enviado correctamente", {
+        description: "Tus resultados se guardaron en tu historial.",
+        icon: <CheckCircle2 className="h-4 w-4" />,
+      });
+    })();
+  }, [done, user, scores, ranked]);
+
   const progress = Math.round((step / total) * 100);
 
   function pick(i: number) {
-    setAnswers((prev) => [...prev.slice(0, step), i]);
+    setAnswers((prev) => {
+      const next = [...prev];
+      next[step] = i;
+      return next;
+    });
     setStep(step + 1);
   }
   function back() { if (step > 0) setStep(step - 1); }
-  function reset() { setStep(0); setAnswers([]); }
+  async function reset() {
+    setStep(0); setAnswers([]); resultSaved.current = false; savedOnce.current = false;
+    if (user) await supabase.from("test_progress").delete().eq("user_id", user.id);
+  }
 
   return (
     <div className="min-h-screen">
@@ -64,7 +129,10 @@ function TestPage() {
           <>
             <div className="mb-6 flex items-center justify-between text-sm text-muted-foreground">
               <span>Pregunta {step + 1} de {total}</span>
-              <span>{progress}%</span>
+              <span className="flex items-center gap-3">
+                {savedFlash && <span className="text-xs text-leaf">Guardado ✓</span>}
+                {progress}%
+              </span>
             </div>
             <div className="h-2 w-full overflow-hidden rounded-full border border-ink/20 bg-secondary">
               <div className="h-full bg-gradient-warm transition-all" style={{ width: `${progress}%` }} />
@@ -158,7 +226,10 @@ function TestPage() {
               <button onClick={reset} className="inline-flex items-center gap-2 rounded-full border-2 border-ink bg-cream px-5 py-2.5 font-semibold transition-transform hover:-translate-y-0.5">
                 <RotateCcw className="h-4 w-4" /> Repetir test
               </button>
-              <Link to="/recursos" className="inline-flex items-center gap-2 rounded-full border-2 border-ink bg-ink px-5 py-2.5 font-semibold text-cream transition-transform hover:-translate-y-0.5">
+              <Link to="/historial" className="inline-flex items-center gap-2 rounded-full border-2 border-ink bg-ink px-5 py-2.5 font-semibold text-cream transition-transform hover:-translate-y-0.5">
+                Ver mi historial
+              </Link>
+              <Link to="/recursos" className="inline-flex items-center gap-2 rounded-full border-2 border-ink bg-cream px-5 py-2.5 font-semibold transition-transform hover:-translate-y-0.5">
                 Ver consejos
               </Link>
             </div>

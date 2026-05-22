@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as UniversidadesRouteImport } from './routes/universidades'
 import { Route as TestRouteImport } from './routes/test'
 import { Route as RecursosRouteImport } from './routes/recursos'
+import { Route as PanelRouteImport } from './routes/panel'
+import { Route as HistorialRouteImport } from './routes/historial'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CarrerasIndexRouteImport } from './routes/carreras.index'
@@ -30,6 +32,16 @@ const TestRoute = TestRouteImport.update({
 const RecursosRoute = RecursosRouteImport.update({
   id: '/recursos',
   path: '/recursos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PanelRoute = PanelRouteImport.update({
+  id: '/panel',
+  path: '/panel',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistorialRoute = HistorialRouteImport.update({
+  id: '/historial',
+  path: '/historial',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -56,6 +68,8 @@ const CarrerasSlugRoute = CarrerasSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/historial': typeof HistorialRoute
+  '/panel': typeof PanelRoute
   '/recursos': typeof RecursosRoute
   '/test': typeof TestRoute
   '/universidades': typeof UniversidadesRoute
@@ -65,6 +79,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/historial': typeof HistorialRoute
+  '/panel': typeof PanelRoute
   '/recursos': typeof RecursosRoute
   '/test': typeof TestRoute
   '/universidades': typeof UniversidadesRoute
@@ -75,6 +91,8 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/historial': typeof HistorialRoute
+  '/panel': typeof PanelRoute
   '/recursos': typeof RecursosRoute
   '/test': typeof TestRoute
   '/universidades': typeof UniversidadesRoute
@@ -86,6 +104,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/historial'
+    | '/panel'
     | '/recursos'
     | '/test'
     | '/universidades'
@@ -95,6 +115,8 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/historial'
+    | '/panel'
     | '/recursos'
     | '/test'
     | '/universidades'
@@ -104,6 +126,8 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/auth'
+    | '/historial'
+    | '/panel'
     | '/recursos'
     | '/test'
     | '/universidades'
@@ -114,6 +138,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
+  HistorialRoute: typeof HistorialRoute
+  PanelRoute: typeof PanelRoute
   RecursosRoute: typeof RecursosRoute
   TestRoute: typeof TestRoute
   UniversidadesRoute: typeof UniversidadesRoute
@@ -142,6 +168,20 @@ declare module '@tanstack/react-router' {
       path: '/recursos'
       fullPath: '/recursos'
       preLoaderRoute: typeof RecursosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/panel': {
+      id: '/panel'
+      path: '/panel'
+      fullPath: '/panel'
+      preLoaderRoute: typeof PanelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/historial': {
+      id: '/historial'
+      path: '/historial'
+      fullPath: '/historial'
+      preLoaderRoute: typeof HistorialRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -178,6 +218,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
+  HistorialRoute: HistorialRoute,
+  PanelRoute: PanelRoute,
   RecursosRoute: RecursosRoute,
   TestRoute: TestRoute,
   UniversidadesRoute: UniversidadesRoute,

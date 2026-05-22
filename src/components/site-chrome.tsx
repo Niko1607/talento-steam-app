@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { LogOut, Sparkles } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 
-const links = [
+const baseLinks = [
   { to: "/", label: "Inicio" },
   { to: "/test", label: "Test" },
   { to: "/carreras", label: "Carreras" },
@@ -14,6 +14,12 @@ export function SiteHeader() {
   const { pathname } = useLocation();
   const nav = useNavigate();
   const { user, profile, signOut } = useAuth();
+
+  const links = [
+    ...baseLinks,
+    ...(user ? [{ to: "/historial" as const, label: "Historial" }] : []),
+    ...(profile?.role === "orientador" || profile?.role === "docente" ? [{ to: "/panel" as const, label: "Panel" }] : []),
+  ];
 
   return (
     <header className="sticky top-0 z-40 border-b border-ink/10 bg-background/85 backdrop-blur">
