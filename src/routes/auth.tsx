@@ -23,7 +23,7 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [institution, setInstitution] = useState("");
-  const [role, setRole] = useState<"estudiante" | "orientador">("estudiante");
+  const [role, setRole] = useState<"estudiante" | "orientador" | "docente">("estudiante");
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
