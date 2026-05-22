@@ -41,12 +41,64 @@ export type Database = {
         }
         Relationships: []
       }
+      test_progress: {
+        Row: {
+          answers: Json
+          current_step: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          answers?: Json
+          current_step?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          answers?: Json
+          current_step?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      test_results: {
+        Row: {
+          created_at: string
+          id: string
+          scores: Json
+          top_area: string | null
+          top_areas: string[]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          scores: Json
+          top_area?: string | null
+          top_areas?: string[]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          scores?: Json
+          top_area?: string | null
+          top_areas?: string[]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_role: {
+        Args: { _user_id: string }
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
+      same_institution: { Args: { _a: string; _b: string }; Returns: boolean }
     }
     Enums: {
       app_role: "estudiante" | "orientador" | "docente"
