@@ -84,10 +84,10 @@ function AuthPage() {
                 <Field label="Institución educativa" value={institution} onChange={setInstitution} placeholder="Colegio, instituto o universidad" />
                 <div>
                   <label className="mb-1 block text-xs font-semibold uppercase tracking-wider">Rol</label>
-                  <div className="grid grid-cols-2 gap-2">
-                    {(["estudiante", "orientador"] as const).map((r) => (
+                  <div className="grid grid-cols-3 gap-2">
+                    {(["estudiante", "docente", "orientador"] as const).map((r) => (
                       <button type="button" key={r} onClick={() => setRole(r)}
-                        className={`rounded-xl border-2 border-ink px-3 py-2 text-sm font-semibold capitalize transition-all ${
+                        className={`rounded-xl border-2 border-ink px-2 py-2 text-xs font-semibold capitalize transition-all ${
                           role === r ? "bg-ink text-cream" : "bg-card hover:bg-sun/30"
                         }`}>
                         {r}
