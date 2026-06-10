@@ -23,7 +23,7 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [institution, setInstitution] = useState("");
-  const [role, setRole] = useState<"estudiante" | "orientador" | "docente">("estudiante");
+  // Role is always 'estudiante' for self-signup. Elevated roles must be assigned by an admin.
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
