@@ -23,7 +23,7 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [institution, setInstitution] = useState("");
-  const [role, setRole] = useState<"estudiante" | "orientador" | "docente">("estudiante");
+  // Role is always 'estudiante' for self-signup. Elevated roles must be assigned by an admin.
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -43,7 +43,7 @@ function AuthPage() {
           email, password,
           options: {
             emailRedirectTo: `${window.location.origin}/`,
-            data: { full_name: fullName, institution, role },
+            data: { full_name: fullName, institution },
           },
         });
         if (error) throw error;
@@ -82,19 +82,9 @@ function AuthPage() {
               <>
                 <Field label="Nombre completo" value={fullName} onChange={setFullName} placeholder="Tu nombre" />
                 <Field label="Institución educativa" value={institution} onChange={setInstitution} placeholder="Colegio, instituto o universidad" />
-                <div>
-                  <label className="mb-1 block text-xs font-semibold uppercase tracking-wider">Rol</label>
-                  <div className="grid grid-cols-3 gap-2">
-                    {(["estudiante", "docente", "orientador"] as const).map((r) => (
-                      <button type="button" key={r} onClick={() => setRole(r)}
-                        className={`rounded-xl border-2 border-ink px-2 py-2 text-xs font-semibold capitalize transition-all ${
-                          role === r ? "bg-ink text-cream" : "bg-card hover:bg-sun/30"
-                        }`}>
-                        {r}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+                <p className="rounded-xl border-2 border-ink/20 bg-sun/20 px-3 py-2 text-xs text-muted-foreground">
+                  Tu cuenta se creará como <strong>estudiante</strong>. Los roles de docente u orientador son asignados por un administrador.
+                </p>
               </>
             )}
             <Field label="Email" type="email" value={email} onChange={setEmail} placeholder="tu@correo.com" />
